@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Registro e inicio de sesión</title>
+  <style>
+    body { font-family: Arial, sans-serif; background: #eef2f5; display: flex; justify-content: center; padding-top: 60px; }
+    .caja { background: #fff; padding: 30px; border-radius: 8px; width: 320px; box-shadow: 0 2px 8px rgba(0,0,0,.15); }
+    h2 { text-align: center; color: #39a900; margin-top: 0; }
+    input { width: 100%; padding: 10px; margin: 8px 0; box-sizing: border-box; border: 1px solid #ccc; border-radius: 4px; }
+    button { width: 48%; padding: 10px; border: none; border-radius: 4px; color: #fff; cursor: pointer; }
+    .login { background: #39a900; } .registro { background: #00324d; }
+    #mensaje { margin-top: 15px; padding: 10px; border-radius: 4px; display: none; text-align: center; }
+    .ok { background: #d4edda; color: #155724; } .error { background: #f8d7da; color: #721c24; }
+  </style>
+</head>
+<body>
+  <div class="caja">
+    <h2>Iniciar sesión</h2>
+    <input id="usuario" placeholder="Usuario">
+    <input id="password" type="password" placeholder="Contraseña">
+    <button class="login" onclick="enviar('/api/login')">Ingresar</button>
+    <button class="registro" onclick="enviar('/api/registro')">Registrarse</button>
+    <div id="mensaje"></div>
+  </div>
+
+  <script>
+    async function enviar(url) {
+      const datos = {
+        usuario: document.getElementById("usuario").value.trim(),
+        password: document.getElementById("password").value
+      };
+      const resp = await fetch(url, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(datos)
+      });
+      const json = await resp.json();
+      const div = document.getElementById("mensaje");
+      div.textContent = json.mensaje;
+      div.className = json.exito ? "ok" : "error";
+      div.style.display = "block";
+    }
+  </script>
+</body>
+</html>
